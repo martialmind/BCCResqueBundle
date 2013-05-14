@@ -1,5 +1,6 @@
 # Intro to BCC Resque Bundle
 
+
 The BCC resque bundle provides integration of php-resque to Symfony2. It is inspired from resque, a Redis-backed Ruby library for creating background jobs, placing them on multiple queues, and processing them later.
 
 ## Features:
@@ -81,9 +82,8 @@ You may want to add some configuration to your `config.yml`
 ``` yml
 # app/config/config.yml
 bcc_resque:
-    class: BCC\ResqueBundle\Resque           # the resque class if different from default
+    class: BCC\ResqueBundle\Resque  # the resque class if different from default
     vendor_dir: %kernel.root_dir%/../vendor  # the vendor dir if different from default
-    prefix: my-resque-prefix                 # optional prefix to separate Resque data per site/app
     redis:
         host: localhost                      # the redis host
         port: 6379                           # the redis port
@@ -146,6 +146,8 @@ You can also run a worker foreground by adding the `--foreground` option;
 By default `VERBOSE` environment variable is set when calling php-resque
 - `--verbose` option sets `VVERBOSE`
 - `--quiet` disables both so no debug output is thrown
+- `--workers` option sets number of workers
+
 
 See php-resque logging option : https://github.com/chrisboulton/php-resque#logging
 
@@ -202,7 +204,7 @@ Here's a sample conf file
 
 ```ini
 [program:myapp_phpresque_default]
-command = /usr/bin/php /home/sites/myapp/prod/current/vendor/chrisboulton/php-resque/resque.php
+command = /usr/bin/php /home/sites/myapp/prod/current/vendor/chrisboulton/php-resque/bin/resque
 user = myusername
 environment = APP_INCLUDE='/home/sites/myapp/prod/current/vendor/autoload.php',VERBOSE='1',QUEUE='default'
 
@@ -214,8 +216,6 @@ environment = APP_INCLUDE='/home/sites/myapp/prod/current/vendor/autoload.php',V
 [group:myapp]
 programs=myapp_phpresque_default,myapp_phpresque_scheduledworker
 ```
-
-(If you use a custom Resque prefix, add an extra environment variable: PREFIX='my-resque-prefix')
 
 Then in Capifony you can do
 
